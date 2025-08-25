@@ -66,10 +66,37 @@ public class BattleSystem : MonoBehaviour
         if(!battleEnd) {
             battleEnd = true;
 
+<<<<<<< Updated upstream
         if (goblins.Count > 0)
         {
             gm.raidVictory();
             combatLog.text = "Los goblins ganaron";
+=======
+            if (goblins.Count > 0)
+            {
+                gm.raidVictory(raidLevelAtStart);
+                gm.HealAllGoblins();
+
+                // Intento de captura (solo al ganar)
+                Human capturada = gm.TryCaptureFromRaid(gm.raidActual);
+                if (combatLog != null)
+                {
+                    if (capturada != null)
+                        combatLog.text = "Los goblins ganaron. Has capturado a " + capturada.nombre + ".";
+                    else
+                        combatLog.text = "Los goblins ganaron.";
+                }
+            }
+            else
+            {
+                gm.raidDefeat();
+                if (combatLog != null) combatLog.text = "Los humanos ganaron";
+            }
+
+            // Espera y vuelve a la colonia (solo una vez)
+            yield return new WaitForSeconds(5f);
+            SceneManager.LoadScene("ColonyScene");
+>>>>>>> Stashed changes
         }
 
         else

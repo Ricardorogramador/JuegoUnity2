@@ -42,6 +42,17 @@ public class GameManager : MonoBehaviour
     public BattleSystem battleSystem;
     public Raid raidActual;
 
+    // Capturas
+    [Header("Capturas")]
+    [Tooltip("Probabilidad base de capturar a una mujer de la raid al ganar.")]
+    public float baseCaptureChance = 0.60f;     // 60%
+    [Tooltip("Bonificación de probabilidad por cada mujer presente en la raid.")]
+    public float bonusPerFemale = 0.15f;        // +15% por mujer
+    [Tooltip("Probabilidad máxima de captura.")]
+    public float maxCaptureChance = 0.95f;      // Tope 95%
+    [Tooltip("Lista de prisioneras capturadas en raids.")]
+    public List<Human> prisioneras = new List<Human>();
+
     private bool initialized = false;
 
     void Awake()
@@ -63,8 +74,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+<<<<<<< Updated upstream
         // Si arrancas directamente en ColonyScene, intenta auto-bindeo
         TryAutoBindColonyUI();
+=======
+        // Binding de UI: ahora lo hace exclusivamente ColonyUIBinder.Awake en la escena de colonia.
+>>>>>>> Stashed changes
 
         if (!initialized)
         {
@@ -123,7 +138,11 @@ public class GameManager : MonoBehaviour
         if (scene.name == colonySceneName)
         {
             paused = false;
+<<<<<<< Updated upstream
             TryAutoBindColonyUI();
+=======
+            raidActual = null; // evita residuo de la raid previa
+>>>>>>> Stashed changes
             UpdateUI();
         }
     }
@@ -144,7 +163,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Colony UI attached correctamente.");
     }
 
+<<<<<<< Updated upstream
     // Intenta encontrar automáticamente un ColonyUIBinder en la escena (si el desarrollador se olvidó)
+=======
+    // Utilidad manual por si olvidas colocar el binder (no se llama automáticamente).
+>>>>>>> Stashed changes
     bool TryAutoBindColonyUI()
     {
         var binder = FindObjectOfType<ColonyUIBinder>();
@@ -262,6 +285,18 @@ public class GameManager : MonoBehaviour
             Destroy(goblinPanel.GetChild(index).gameObject);
     }
 
+<<<<<<< Updated upstream
+=======
+    // NUEVO: sobrecarga correcta que usa el nivel de la raid completada
+    public void raidVictory(int completedRaidLevel)
+    {
+        int rewardSouls = completedRaidLevel * 2;
+        heroSouls += rewardSouls;
+        UpdateUI();
+    }
+
+    [Obsolete("Usa raidVictory(int completedRaidLevel) pasando el nivel real de la raid completada.")]
+>>>>>>> Stashed changes
     public void raidVictory()
     {
         int rewardSouls = raidLevel * 2;
@@ -284,6 +319,56 @@ public class GameManager : MonoBehaviour
             g.vida = g.maxVida;
             g.mana = g.maxMana;
         }
+    }
+
+    // CAPTURA: intenta capturar UNA mujer de la raid ganada
+    // Devuelve la prisionera capturada o null si no hubo captura
+    public Human TryCaptureFromRaid(Raid raid)
+    {
+        if (raid == null || raid.enemigos == null || raid.enemigos.Count == 0)
+            return null;
+
+        // Reúne candidatas femeninas
+        List<Human> candidatas = new List<Human>();
+        foreach (var h in raid.enemigos)
+        {
+            // Asumiendo que Human tiene un campo o propiedad 'sexo' de tipo HumanSex
+            if (h.sexo == HumanSex.Femenino)
+            {
+                candidatas.Add(h);
+            }
+        }
+
+        if (candidatas.Count == 0) return null;
+
+        float chance = Mathf.Min(maxCaptureChance, baseCaptureChance + bonusPerFemale * candidatas.Count);
+        float roll = UnityEngine.Random.value;
+
+        if (roll <= chance)
+        {
+            Human capturada = candidatas[UnityEngine.Random.Range(0, candidatas.Count)];
+            AddPrisionera(capturada);
+
+            // Limpieza opcional: remover de la lista de enemigos de la raid
+            raid.enemigos.Remove(capturada);
+            // Puedes marcar la raid como no activa si ya no la usarás
+            raid.activa = false;
+
+            Debug.Log($"[Captura] Capturada: {capturada.nombre}. Roll {roll:F2} <= chance {chance:P0}");
+            return capturada;
+        }
+        else
+        {
+            Debug.Log($"[Captura] Falló captura. Roll {roll:F2} > chance {chance:P0}");
+            return null;
+        }
+    }
+
+    public void AddPrisionera(Human h)
+    {
+        if (h == null) return;
+        if (prisioneras == null) prisioneras = new List<Human>();
+        prisioneras.Add(h);
     }
 
     void UpdateUI()
