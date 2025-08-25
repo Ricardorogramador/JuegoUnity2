@@ -74,12 +74,12 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-<<<<<<< Updated upstream
+
         // Si arrancas directamente en ColonyScene, intenta auto-bindeo
         TryAutoBindColonyUI();
-=======
+
         // Binding de UI: ahora lo hace exclusivamente ColonyUIBinder.Awake en la escena de colonia.
->>>>>>> Stashed changes
+
 
         if (!initialized)
         {
@@ -138,11 +138,11 @@ public class GameManager : MonoBehaviour
         if (scene.name == colonySceneName)
         {
             paused = false;
-<<<<<<< Updated upstream
+
             TryAutoBindColonyUI();
-=======
+
             raidActual = null; // evita residuo de la raid previa
->>>>>>> Stashed changes
+
             UpdateUI();
         }
     }
@@ -163,11 +163,11 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Colony UI attached correctamente.");
     }
 
-<<<<<<< Updated upstream
+
     // Intenta encontrar automáticamente un ColonyUIBinder en la escena (si el desarrollador se olvidó)
-=======
+
     // Utilidad manual por si olvidas colocar el binder (no se llama automáticamente).
->>>>>>> Stashed changes
+
     bool TryAutoBindColonyUI()
     {
         var binder = FindObjectOfType<ColonyUIBinder>();
@@ -285,8 +285,8 @@ public class GameManager : MonoBehaviour
             Destroy(goblinPanel.GetChild(index).gameObject);
     }
 
-<<<<<<< Updated upstream
-=======
+
+
     // NUEVO: sobrecarga correcta que usa el nivel de la raid completada
     public void raidVictory(int completedRaidLevel)
     {
@@ -296,7 +296,6 @@ public class GameManager : MonoBehaviour
     }
 
     [Obsolete("Usa raidVictory(int completedRaidLevel) pasando el nivel real de la raid completada.")]
->>>>>>> Stashed changes
     public void raidVictory()
     {
         int rewardSouls = raidLevel * 2;
