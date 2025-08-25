@@ -22,8 +22,8 @@ public class Human
         divino = _divino;
         sexo = _sexo;
 
-        vida = (int)((100 + _fuerza) * 1.2f);
-        mana = (int)((50 + _magia) * 1.2f);
+        vida = (int)((100 + _fuerza) * 1.5f);
+        mana = (int)((50 + _magia) * 1.5f);
 
         humanClass = AsignarClase();
     }

@@ -63,8 +63,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Si arrancas directamente en ColonyScene, intenta auto-bindeo
-        TryAutoBindColonyUI();
+        // Binding de UI: ahora lo hace exclusivamente ColonyUIBinder.Awake en la escena de colonia.
+        // TryAutoBindColonyUI();  // Eliminado para evitar doble binding
 
         if (!initialized)
         {
@@ -119,11 +119,12 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Si la escena cargada es la colonia, reanuda y auto-bindea
+        // Si la escena cargada es la colonia, reanuda, limpia raidActual y refresca UI
         if (scene.name == colonySceneName)
         {
             paused = false;
-            TryAutoBindColonyUI();
+            raidActual = null; // evita residuo de la raid previa
+            // El ColonyUIBinder de la escena reatachará la UI automáticamente.
             UpdateUI();
         }
     }
@@ -145,6 +146,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Intenta encontrar automáticamente un ColonyUIBinder en la escena (si el desarrollador se olvidó)
+    // Conservado como utilidad, pero ya no se llama automáticamente.
     bool TryAutoBindColonyUI()
     {
         var binder = FindObjectOfType<ColonyUIBinder>();
@@ -262,10 +264,22 @@ public class GameManager : MonoBehaviour
             Destroy(goblinPanel.GetChild(index).gameObject);
     }
 
+    // NUEVO: sobrecarga correcta que usa el nivel de la raid completada
+    public void raidVictory(int completedRaidLevel)
+    {
+        int rewardSouls = completedRaidLevel * 2;
+        heroSouls += rewardSouls;
+        UpdateUI();
+    }
+
+    // Mantengo el método previo para compatibilidad, pero la recompensa puede ser incorrecta.
+    // Actualiza las llamadas a usar raidVictory(int completedRaidLevel) pasando el nivel de la raid jugada.
+    [Obsolete("Usa raidVictory(int completedRaidLevel) pasando el nivel real de la raid completada.")]
     public void raidVictory()
     {
-        int rewardSouls = raidLevel * 2;
+        int rewardSouls = raidLevel * 2; // Puede dar recompensa incorrecta si raidLevel ya se incrementó
         heroSouls += rewardSouls;
+        UpdateUI();
     }
 
     public void raidDefeat()
@@ -275,6 +289,7 @@ public class GameManager : MonoBehaviour
             int idx = UnityEngine.Random.Range(0, colony.Count);
             colony.RemoveAt(idx);
         }
+        UpdateUI();
     }
 
     public void HealAllGoblins()
