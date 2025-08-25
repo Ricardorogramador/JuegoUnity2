@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BreedTask : MonoBehaviour
+[System.Serializable]
+public class BreedingTask
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Goblin father;
+    public Human captive;
+    public int startMinute; // tiempo absoluto en minutos (desde día 1)
+    public int endMinute;   // start + duración
 
-    // Update is called once per frame
-    void Update()
+    public BreedingTask(Goblin father, Human captive, int startMinute, int durationMinutes)
     {
-        
+        this.father = father;
+        this.captive = captive;
+        this.startMinute = startMinute;
+        this.endMinute = startMinute + durationMinutes;
     }
 }

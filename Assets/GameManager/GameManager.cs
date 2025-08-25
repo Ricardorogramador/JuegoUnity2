@@ -53,6 +53,23 @@ public class GameManager : MonoBehaviour
     [Tooltip("Lista de prisioneras capturadas en raids.")]
     public List<Human> prisioneras = new List<Human>();
 
+    // Cría/Apareamiento
+    [Header("Cría")]
+    [Tooltip("Duración en horas de juego para crear un nuevo goblin.")]
+    public int breedingDurationHours = 8;          // 8h
+    [Tooltip("Horas de descanso de la prisionera después de completar la cría.")]
+    public int restAfterBreedingHours = 12;        // 12h
+    [Tooltip("Probabilidad de mutación del nuevo goblin.")]
+    [Range(0f, 1f)] public float mutationChance = 0.30f; // 30%
+    [Tooltip("Rango del bonus de mutación que se añade a un atributo al mutar.")]
+    public Vector2Int mutationBonusRange = new Vector2Int(2, 4);
+
+    // Estado de cría
+    private readonly List<BreedingTask> activeBreedings = new List<BreedingTask>();
+    private readonly HashSet<Human> captivesBusy = new HashSet<Human>();
+    private readonly HashSet<Goblin> goblinsBusy = new HashSet<Goblin>();
+    private readonly Dictionary<Human, int> prisonerRestUntil = new Dictionary<Human, int>();
+
     private bool initialized = false;
 
     void Awake()
@@ -74,12 +91,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-
-        // Si arrancas directamente en ColonyScene, intenta auto-bindeo
-        TryAutoBindColonyUI();
-
         // Binding de UI: ahora lo hace exclusivamente ColonyUIBinder.Awake en la escena de colonia.
-
 
         if (!initialized)
         {
@@ -122,6 +134,9 @@ public class GameManager : MonoBehaviour
                     GenerateRaid();
                 }
 
+                // Procesa completado de crías antes de refrescar UI
+                ProcessBreedingTasks();
+
                 UpdateUI();
             }
         }
@@ -134,15 +149,11 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Si la escena cargada es la colonia, reanuda y auto-bindea
+        // Si la escena cargada es la colonia, reanuda, limpia raidActual y refresca UI
         if (scene.name == colonySceneName)
         {
             paused = false;
-
-            TryAutoBindColonyUI();
-
             raidActual = null; // evita residuo de la raid previa
-
             UpdateUI();
         }
     }
@@ -163,11 +174,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GameManager] Colony UI attached correctamente.");
     }
 
-
-    // Intenta encontrar automáticamente un ColonyUIBinder en la escena (si el desarrollador se olvidó)
-
     // Utilidad manual por si olvidas colocar el binder (no se llama automáticamente).
-
     bool TryAutoBindColonyUI()
     {
         var binder = FindObjectOfType<ColonyUIBinder>();
@@ -285,8 +292,6 @@ public class GameManager : MonoBehaviour
             Destroy(goblinPanel.GetChild(index).gameObject);
     }
 
-
-
     // NUEVO: sobrecarga correcta que usa el nivel de la raid completada
     public void raidVictory(int completedRaidLevel)
     {
@@ -300,6 +305,7 @@ public class GameManager : MonoBehaviour
     {
         int rewardSouls = raidLevel * 2;
         heroSouls += rewardSouls;
+        UpdateUI();
     }
 
     public void raidDefeat()
@@ -309,6 +315,7 @@ public class GameManager : MonoBehaviour
             int idx = UnityEngine.Random.Range(0, colony.Count);
             colony.RemoveAt(idx);
         }
+        UpdateUI();
     }
 
     public void HealAllGoblins()
@@ -331,7 +338,6 @@ public class GameManager : MonoBehaviour
         List<Human> candidatas = new List<Human>();
         foreach (var h in raid.enemigos)
         {
-            // Asumiendo que Human tiene un campo o propiedad 'sexo' de tipo HumanSex
             if (h.sexo == HumanSex.Femenino)
             {
                 candidatas.Add(h);
@@ -350,7 +356,6 @@ public class GameManager : MonoBehaviour
 
             // Limpieza opcional: remover de la lista de enemigos de la raid
             raid.enemigos.Remove(capturada);
-            // Puedes marcar la raid como no activa si ya no la usarás
             raid.activa = false;
 
             Debug.Log($"[Captura] Capturada: {capturada.nombre}. Roll {roll:F2} <= chance {chance:P0}");
@@ -368,6 +373,162 @@ public class GameManager : MonoBehaviour
         if (h == null) return;
         if (prisioneras == null) prisioneras = new List<Human>();
         prisioneras.Add(h);
+    }
+
+    // =========================
+    // LÓGICA DE CRÍA/APAREAMIENTO
+    // =========================
+
+    // Inicia una tarea de cría entre un goblin y una prisionera (mujer).
+    // Devuelve true si se inició correctamente.
+    public bool StartBreeding(Goblin father, Human captive)
+    {
+        if (father == null || captive == null)
+        {
+            Debug.LogWarning("[Breeding] Parámetros inválidos.");
+            return false;
+        }
+        if (captive.sexo != HumanSex.Femenino)
+        {
+            Debug.LogWarning("[Breeding] Solo se puede criar con prisioneras femeninas.");
+            return false;
+        }
+        if (!prisioneras.Contains(captive))
+        {
+            Debug.LogWarning("[Breeding] La prisionera no está en la lista de prisioneras.");
+            return false;
+        }
+        if (goblinsBusy.Contains(father))
+        {
+            Debug.LogWarning("[Breeding] El goblin seleccionado ya está ocupado en otra cría.");
+            return false;
+        }
+        if (captivesBusy.Contains(captive))
+        {
+            Debug.LogWarning("[Breeding] La prisionera ya está ocupada en otra cría.");
+            return false;
+        }
+        int now = GetCurrentMinutes();
+        if (IsPrisonerResting(captive, now))
+        {
+            int remain = GetMinutesUntilPrisonerAvailable(captive, now);
+            Debug.LogWarning($"[Breeding] La prisionera está descansando. Disponible en {remain} minutos (~{remain / 60f:0.0}h).");
+            return false;
+        }
+
+        int duration = Mathf.Max(1, breedingDurationHours * 60);
+        var task = new BreedingTask(father, captive, now, duration);
+        activeBreedings.Add(task);
+        goblinsBusy.Add(father);
+        captivesBusy.Add(captive);
+
+        Debug.Log($"[Breeding] Iniciada cría: {father.nombre} + {captive.nombre}. Termina a los {task.endMinute} min.");
+        return true;
+    }
+
+    // Procesa las tareas de cría y crea goblins cuando terminan
+    private void ProcessBreedingTasks()
+    {
+        if (activeBreedings.Count == 0) return;
+
+        int now = GetCurrentMinutes();
+        // Recopilar las que terminaron
+        List<BreedingTask> finished = new List<BreedingTask>();
+        foreach (var task in activeBreedings)
+        {
+            if (now >= task.endMinute)
+                finished.Add(task);
+        }
+
+        if (finished.Count == 0) return;
+
+        foreach (var task in finished)
+        {
+            // Crear nuevo goblin
+            Goblin child = ComputeOffspring(task.father, task.captive);
+            colony.Add(child);
+
+            // Limpiar ocupación del padre
+            goblinsBusy.Remove(task.father);
+
+            // Marcar descanso de la prisionera
+            int restMinutes = Mathf.Max(0, restAfterBreedingHours * 60);
+            int restUntil = now + restMinutes;
+            prisonerRestUntil[task.captive] = restUntil;
+            captivesBusy.Remove(task.captive);
+
+            Debug.Log($"[Breeding] Nueva cría creada: {child.nombre} (F:{child.fuerza} M:{child.magia} D:{child.divino}). " +
+                      $"Prisionera '{task.captive.nombre}' en descanso hasta minuto {restUntil} (~{restAfterBreedingHours}h).");
+        }
+
+        // Remover finalizadas
+        foreach (var task in finished)
+            activeBreedings.Remove(task);
+
+        // Refrescar UI de goblins si estamos en la colonia
+        if (SceneManager.GetActiveScene().name == colonySceneName)
+        {
+            RebuildGoblinUI();
+            UpdateUI();
+        }
+    }
+
+    // Crea el hijo combinando stats y aplicando posible mutación
+    private Goblin ComputeOffspring(Goblin father, Human captive)
+    {
+        int f = Mathf.Max(1, Mathf.RoundToInt((father.fuerza + captive.fuerza) / 1.5f));
+        int m = Mathf.Max(1, Mathf.RoundToInt((father.magia + captive.magia) / 1.5f));
+        int d = Mathf.Max(1, Mathf.RoundToInt((father.divino + captive.divino) / 1.5f));
+
+        // Mutación
+        if (UnityEngine.Random.value <= mutationChance)
+        {
+            int bonus = UnityEngine.Random.Range(mutationBonusRange.x, mutationBonusRange.y + 1);
+            int stat = UnityEngine.Random.Range(0, 3);
+            switch (stat)
+            {
+                case 0: f += bonus; break;
+                case 1: m += bonus; break;
+                default: d += bonus; break;
+            }
+            Debug.Log($"[Breeding] Mutación! +{bonus} en {(stat == 0 ? "Fuerza" : stat == 1 ? "Magia" : "Divino")}");
+        }
+
+        string childName = $"Goblin_{colony.Count + 1}";
+        var child = new Goblin(childName, f, m, d);
+        return child;
+    }
+
+    // Helpers de disponibilidad y tiempo
+    public bool IsPrisonerAvailable(Human captive)
+    {
+        int now = GetCurrentMinutes();
+        return !captivesBusy.Contains(captive) && !IsPrisonerResting(captive, now);
+    }
+
+    private bool IsPrisonerResting(Human captive, int now)
+    {
+        if (prisonerRestUntil.TryGetValue(captive, out int until))
+        {
+            return now < until;
+        }
+        return false;
+    }
+
+    public int GetMinutesUntilPrisonerAvailable(Human captive, int now)
+    {
+        if (captivesBusy.Contains(captive)) return int.MaxValue; // ocupada criando
+        if (prisonerRestUntil.TryGetValue(captive, out int until))
+        {
+            return Mathf.Max(0, until - now);
+        }
+        return 0;
+    }
+
+    public int GetCurrentMinutes()
+    {
+        // Día 1 = minuto 0..1439
+        return ((day - 1) * 24 * 60) + (hour * 60) + minute;
     }
 
     void UpdateUI()
