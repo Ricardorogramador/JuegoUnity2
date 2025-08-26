@@ -271,11 +271,11 @@ Transform:
   m_GameObject: {fileID: 724480607}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -477.51297, z: 0}
-  m_LocalScale: {x: 1.6580311, y: 1.6580311, z: 1.6580311}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 795662463}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &795662459
 GameObject:
@@ -373,8 +373,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1006129563}
-  - {fileID: 724480609}
-  - {fileID: 879049723}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -394,8 +392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55dac52bcb845ea4485293d3caf5e17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goblinSide: {fileID: 0}
-  humansSide: {fileID: 0}
+  goblinSide: {fileID: 1792626587}
+  humansSide: {fileID: 283332345}
   combatLog: {fileID: 1006129564}
 --- !u!1 &879049722
 GameObject:
@@ -423,11 +421,11 @@ Transform:
   m_GameObject: {fileID: 879049722}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -477.51297, z: 0}
-  m_LocalScale: {x: 1.6580311, y: 1.6580311, z: 1.6580311}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 795662463}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &879049724
 BoxCollider2D:
@@ -506,10 +504,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 795662463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -80, y: 80}
-  m_SizeDelta: {x: 300, y: 200}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -70}
+  m_SizeDelta: {x: -80, y: 1050}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1006129564
 MonoBehaviour:
@@ -540,8 +538,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190092
+  m_fontColor: {r: 0.047169805, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -558,14 +556,14 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 72
+  m_fontSizeBase: 36
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -574,7 +572,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -947,8 +945,10 @@ SceneRoots:
   - {fileID: 1239879559}
   - {fileID: 795662463}
   - {fileID: 1323670007}
+  - {fileID: 724480609}
+  - {fileID: 879049723}
   - {fileID: 1792626587}
   - {fileID: 283332345}
   - {fileID: 196611387}
-  - {fileID: 1220519088}
   - {fileID: 1051678730}
+  - {fileID: 1220519088}
