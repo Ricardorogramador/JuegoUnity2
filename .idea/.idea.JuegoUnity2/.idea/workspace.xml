@@ -5,11 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d1fc809-2f16-44ce-96a7-781ba040de3c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.JuegoUnity2/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.JuegoUnity2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Battle/BattleSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Battle/BattleSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/GameManager/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/GameManager/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ShaderGraphSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.JuegoUnity2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JuegoUnity2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/BattleSystem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/BattleSystem.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/Raid.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/Raid.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/SeconScene/BattleSpawner.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Battle/SeconScene/BattleSpawner.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/BattleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/BattleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameManager/ColonyUIBinder.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameManager/ColonyUIBinder.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameManager/GameManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameManager/GameManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/Goblin.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/Goblin.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/GoblinUI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/GoblinUI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/GoblinUi.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Goblin/GoblinUi.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Humans/BreedingTask.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Humans/BreedingTask.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Humans/Human.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Humans/Human.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Names/NameBankCreator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Names/NameBankCreator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Names/NameBankSO.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Names/NameBankSO.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Names/NameManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Names/NameManager.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,24 +62,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.47f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.47f1-x86_64\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\Ricardo\Documents\GitHub\JuegoUnity2 -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Ricardo\Documents\GitHub\JuegoUnity2" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -67,7 +91,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.47f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.47f1-x86_64\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath C:\Users\Ricardo\Documents\GitHub\JuegoUnity2 -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="C:\Users\Ricardo\Documents\GitHub\JuegoUnity2" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -114,6 +138,7 @@
       <option name="presentableId" value="Default" />
       <updated>1756159011923</updated>
       <workItem from="1756159014919" duration="4721000" />
+      <workItem from="1756329470405" duration="1556000" />
     </task>
     <servers />
   </component>

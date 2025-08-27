@@ -8,7 +8,7 @@ public class ColonyUIBinder : MonoBehaviour
     public TMP_Text timeText;      // arrastra "Time text"
     public TMP_Text dayText;       // arrastra "Day text"
     public TMP_Text soulsText;     // arrastra "Souls"
-    public Transform goblinPanel;  // arrastra el contenedor donde van los ítems (ej. "content")
+    public Transform goblinPanel;  // arrastra el contenedor donde van los items (ej. "content")
     public GameObject goblinPrefab; // arrastra el prefab del item de goblin
 
     void Awake()

@@ -12,7 +12,7 @@ public static class NameBankCreator
         asset.humanMaleNames = new List<string>(HumanMaleDefault());
         asset.humanFemaleNames = new List<string>(HumanFemaleDefault());
 
-        string path = EditorUtility.SaveFilePanelInProject("Create NameBank", "NameBank", "asset", "Elige ubicación para NameBank.asset");
+        string path = EditorUtility.SaveFilePanelInProject("Create NameBank", "NameBank", "asset", "Elige ubicacion para NameBank.asset");
         if (!string.IsNullOrEmpty(path))
         {
             AssetDatabase.CreateAsset(asset, path);
@@ -34,19 +34,19 @@ public static class NameBankCreator
 
     private static IEnumerable<string> HumanMaleDefault() => new[]
     {
-        "Alejandro","Andrés","Antonio","Bruno","Carlos","Cristian","Daniel","David","Diego","Eduardo",
-        "Emilio","Esteban","Fernando","Francisco","Gabriel","Guillermo","Gonzalo","Hugo","Iván","Javier",
-        "Joaquín","Jorge","José","Juan","Julián","Leonardo","Luis","Manuel","Marcos","Mario",
-        "Martín","Mateo","Miguel","Nicolás","Óscar","Pablo","Pedro","Rafael","Raúl","Ricardo",
-        "Roberto","Rodrigo","Rubén","Salvador","Samuel","Santiago","Sergio","Tomás","Valentín","Vicente"
+        "Alejandro","Andrï¿½s","Antonio","Bruno","Carlos","Cristian","Daniel","David","Diego","Eduardo",
+        "Emilio","Esteban","Fernando","Francisco","Gabriel","Guillermo","Gonzalo","Hugo","Ivï¿½n","Javier",
+        "Joaquï¿½n","Jorge","Josï¿½","Juan","Juliï¿½n","Leonardo","Luis","Manuel","Marcos","Mario",
+        "Martï¿½n","Mateo","Miguel","Nicolï¿½s","ï¿½scar","Pablo","Pedro","Rafael","Raï¿½l","Ricardo",
+        "Roberto","Rodrigo","Rubï¿½n","Salvador","Samuel","Santiago","Sergio","Tomï¿½s","Valentï¿½n","Vicente"
     };
 
     private static IEnumerable<string> HumanFemaleDefault() => new[]
     {
-        "Alejandra","Alicia","Ana","Andrea","Ángela","Beatriz","Camila","Carla","Carolina","Cecilia",
+        "Alejandra","Alicia","Ana","Andrea","ï¿½ngela","Beatriz","Camila","Carla","Carolina","Cecilia",
         "Clara","Daniela","Diana","Elena","Elisa","Elvira","Emilia","Esther","Fernanda","Gabriela",
-        "Inés","Isabel","Jimena","Josefina","Julia","Laura","Lorena","Lucía","Luna","Magdalena",
+        "Inï¿½s","Isabel","Jimena","Josefina","Julia","Laura","Lorena","Lucï¿½a","Luna","Magdalena",
         "Manuela","Marina","Marta","Mercedes","Micaela","Natalia","Noelia","Nora","Olivia","Paula",
-        "Patricia","Pilar","Renata","Rosa","Sara","Silvia","Sofía","Teresa","Valentina","Victoria"
+        "Patricia","Pilar","Renata","Rosa","Sara","Silvia","Sofï¿½a","Teresa","Valentina","Victoria"
     };
 }
