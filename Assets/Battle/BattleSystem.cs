@@ -50,7 +50,7 @@ public class BattleSystem : MonoBehaviour
                 int damageG = Random.Range(5, 15) + attackerG.fuerza;
                 targetH.vida -= damageG;
 
-                string msgG = $"{attackerG.nombre} ataca a {targetH.nombre} e inflige {damageG} de daño\n";
+                string msgG = $"{attackerG.nombre} ataca a {targetH.nombre} e inflige {damageG} de daño. vida restante:  {targetH.vida}\n";
                 if (combatLog != null) combatLog.text = msgG;
                 Debug.Log(msgG);
 
@@ -77,7 +77,7 @@ public class BattleSystem : MonoBehaviour
                 int damageH = Random.Range(5, 15) + attackerH.fuerza;
                 targetG.vida -= damageH;
 
-                string msgH = $"{attackerH.nombre} ataca a {targetG.nombre} e inflige {damageH} de daño!\n";
+                string msgH = $"{attackerH.nombre} ataca a {targetG.nombre} e inflige {damageH} de daño!. vida restante: {targetG.vida}\n";
                 if (combatLog != null) combatLog.text = msgH;
                 Debug.Log(msgH);
 
