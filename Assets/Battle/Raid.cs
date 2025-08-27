@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class Raid
 {
     public List<Human> enemigos;
     public int nivel;
-    public Boolean activa;
+    public bool activa;
 
     public Raid(int _nivel)
     {
@@ -16,7 +15,7 @@ public class Raid
         activa = true;
         enemigos = new List<Human>();
 
-        int cantidad = 1;
+        int cantidad;
 
         // Configuración progresiva de enemigos
         if (nivel <= 5)
@@ -38,9 +37,17 @@ public class Raid
             int f = UnityEngine.Random.Range(1, 5 + nivel);
             int m = UnityEngine.Random.Range(1, 5 + nivel);
             int d = UnityEngine.Random.Range(1, 5 + nivel);
-            HumanSex sex = (UnityEngine.Random.Range(0, 2) == 0) ? HumanSex.Masculino : HumanSex.Femenino;
 
-            enemigos.Add(new Human("Humano_" + i, f, m, d, sex));
+            HumanSex sex = (UnityEngine.Random.Range(0, 2) == 0)
+                ? HumanSex.Masculino
+                : HumanSex.Femenino;
+
+            // Obtener nombre desde NameManager (con fallback por si no está presente)
+            string nombre = NameManager.Instance != null
+                ? NameManager.Instance.GetHumanName(sex)
+                : $"Humano_{i}";
+
+            enemigos.Add(new Human(nombre, f, m, d, sex));
         }
     }
 }

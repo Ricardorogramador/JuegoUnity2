@@ -220,7 +220,9 @@ public class GameManager : MonoBehaviour
             int f = UnityEngine.Random.Range(0, 5);
             int m = UnityEngine.Random.Range(0, 5);
             int d = UnityEngine.Random.Range(0, 5);
-            colony.Add(new Goblin("Goblin_" + i, f, m, d));
+
+            string nombre = NameManager.Instance != null ? NameManager.Instance.GetGoblinName() : $"Goblin_{i}";
+            colony.Add(new Goblin(nombre, f, m, d));
         }
         RebuildGoblinUI();
     }
@@ -233,7 +235,9 @@ public class GameManager : MonoBehaviour
             int m = UnityEngine.Random.Range(0, 5);
             int d = UnityEngine.Random.Range(0, 5);
             HumanSex sex = (UnityEngine.Random.Range(0, 2) == 0) ? HumanSex.Masculino : HumanSex.Femenino;
-            enemies.Add(new Human("Humano_" + i, f, m, d, sex));
+
+            string nombre = NameManager.Instance != null ? NameManager.Instance.GetHumanName(sex) : $"Humano_{i}";
+            enemies.Add(new Human(nombre, f, m, d, sex));
         }
     }
 
@@ -491,12 +495,13 @@ public class GameManager : MonoBehaviour
                 case 1: m += bonus; break;
                 default: d += bonus; break;
             }
-            Debug.Log($"[Breeding] Mutación! +{bonus} en {(stat == 0 ? "Fuerza" : stat == 1 ? "Magia" : "Divino")}");
         }
 
-        string childName = $"Goblin_{colony.Count + 1}";
+        // Nombre desde NameManager (fallback si no existe)
+        string childName = NameManager.Instance?.GetGoblinName() ?? $"Goblin_{colony.Count + 1}";
         var child = new Goblin(childName, f, m, d);
-        return child;
+
+        return child; // <- faltaba esto
     }
 
     // Helpers de disponibilidad y tiempo
